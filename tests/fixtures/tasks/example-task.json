@@ -1,0 +1,9 @@
+{
+  "id": "task-001",
+  "workflow": "feature-dev",
+  "input": "Build a user authentication module with JWT support",
+  "metadata": {
+    "priority": "high",
+    "requestedBy": "alice"
+  }
+}

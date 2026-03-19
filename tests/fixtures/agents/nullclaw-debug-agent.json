@@ -1,0 +1,9 @@
+{
+  "id": "nullclaw-debug-agent",
+  "agentType": "nullclaw",
+  "system_prompt": "You are a lightweight debugging agent. Echo the user's message and confirm task completion.",
+  "auth": {
+    "type": "none"
+  },
+  "skills": ["debug"]
+}

@@ -1,0 +1,19 @@
+{
+  "server": {
+    "port": 4852
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
+  },
+  "sqlite": {
+    "path": "./ftsfaf.db"
+  },
+  "agents_dir": "./agents",
+  "workflows_dir": "./workflows",
+  "skills_dir": "./skills",
+  "tasks_dir": "./tasks",
+  "default_system_prompt": "",
+  "startup_timeout_ms": 30000,
+  "health_poll_interval_ms": 1000
+}

@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  engine:
+    build:
+      context: .
+      dockerfile: Dockerfile.engine
+    ports:
+      - "4852:4852"  # Expose on localhost:4852
+    volumes:
+      - ./data:/app/data
+      - ./workflows:/app/workflows
+      - ./agents:/app/agents
+      - ./skills:/app/skills
+      - ./prompts:/app/prompts
+    environment:
+      - LOG_LEVEL=info
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:4852/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - ftsfaf
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "9482:9482"  # Expose on localhost:9482
+    environment:
+      - ENGINE_URL=http://engine:4852
+      - NODE_ENV=production
+    depends_on:
+      engine:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9482/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - ftsfaf
+
+networks:
+  ftsfaf:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local

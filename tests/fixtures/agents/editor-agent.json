@@ -1,0 +1,12 @@
+{
+  "id": "editor-agent",
+  "agentType": "zeroclaw",
+  "system_prompt": "You are a thoughtful literary editor. Provide constructive critique that evaluates creativity, coherence, emotional impact, and overall quality. Be specific and insightful.",
+  "auth": {
+    "type": "none"
+  },
+  "skills": ["editing"],
+  "metadata": {
+    "model": "openrouter/deepseek/deepseek-v3.2"
+  }
+}

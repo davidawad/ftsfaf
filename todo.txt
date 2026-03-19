@@ -1,0 +1,78 @@
+# ftsfaf Build Progress
+
+
+the dashboard now has the ability to display each 'worker' in the workflow in interesting ways.
+
+just make a very small minimalistic react / next app for the dashboard, that shows some basic statistics from the db like numer of workers running and number of workflows installed / jobs completed
+
+then we need to be able to setup specific tools for viewing specific workflows so that we can see 1 column layout per worker in the flow, and cards (this is a kanban concept) where I can see the job actually move from point a to b
+
+it needs a pipe to the engine so it can see everything actually happening, runing the engine should be optional obviously as you can jst run  it from the cli but this owuld be super helpdul.
+
+
+-------------------------------
+
+All these files still arent using the proper logger yet so if we could figure that out that would be great.
+
+rg 'console\.log' -l
+src/demo-openclaw.ts
+src/adapters/nullclaw/defaults/IDENTITY.dev.md
+tests/demos/mock-workflow.ts
+src/adapters/nullclaw/defaults/SOUL.dev.md
+src/demo.ts
+tests/demos/poem-workflow.ts
+src/adapters/openclaw/defaults/SOUL.dev.md
+src/adapters/openclaw/defaults/IDENTITY.dev.md
+tests/demos/openclaw-workflow.ts
+docs/adk-integration-plan.md
+docs/adk/loop-agents.md
+docs/adk/custom-agents.md
+docs/adk/llm-agents.md
+
+zero emoji anywhere as well please
+
+-------------------------------
+
+I want workflow validate to not only validate the workflow, I should be able to call workflow validate --template and see in the /tmp (maybe this hsould be called output_ that will actually SHOW ME the output files that are created for each agent so I know exactly the full prompts each different agent will be given
+
+that should also be part of our unit tests if it isn't already to make sure all of the templating bullshit we're doing actually works correctly.
+
+another failure scenario we have to test is the ability to give 'feedback' from any node of the graph to any other, the idea being a tester may give feedback to the programmer or whatever else, or the pharmacist says a prescription is invalid to a doctor, we need to think through and test these failure scenarios and make sure they work.
+
+let's try that for a contrived new workflow for a car insurance company biller, where the insurance bill underwriter (that's what it has to think it is )
+
+
+then finally a separate test-workflow script (now this really needs to be a script) that uses live tokens should exist to make sure the full thing actually passes messages from one to another, this should NOt be part of normal make / just test, this is the full thing.
+
+agent config adapters need to know how to spin up an a new agent if they're going to, sometimes the agent will already exist somewhere and be reachable, other times it wont. we need to distinguish between those
+
+---------------------------------
+
+
+## IN SCOPE / BUILD ORDER
+
+- [x] 1. Project scaffold (npm + Effect + eslint-functional)
+- [x] 2. Effect Schema for all config types (skill, agent, workflow, ftsfaf.config)
+- [x] 3. Tarjan's SCC algorithm (pure FP, fully tested)
+- [x] 4. Graph validation (7-step pipeline) + condensation topo-sort
+- [ ] 5. Config loading as Effect Layers (skills, agents, workflows, ftsfaf.config)
+- [ ] 6. SQLite state management (schema, migrations, CRUD helpers)
+- [ ] 7. Prompt interpolation (workflow {{variable}} → task data stitching before sending to agent)
+- [ ] 8. Infrastructure providers (Kubernetes, Docker, Process, Remote, EC2 stub)
+- [ ] 9. BullMQ worker + dispatcher (A2A dispatch, artifact management, retry logic)
+- [ ] 10. Express server (REST API + static dashboard)
+- [ ] 11. Startup sequence + integration testing
+
+## FUTURE / OUT OF SCOPE
+
+- Advanced observability (Langfuse / OpenTelemetry integration)
+- Multi-instance clustering with distributed locking
+- Full EC2 provider implementation (currently stubbed)
+- Helm chart for Kubernetes deployment
+- CLI interface (`ftsfaf run --workflow X --input "..."`)
+- Inbound authentication on the ftsfaf API server
+- Advanced workflow visualization beyond basic dashboard
+- Workflow versioning and migration tools
+- Agent pool management and auto-scaling
+- Cost tracking and budget enforcement
+- Webhook notifications for run completions

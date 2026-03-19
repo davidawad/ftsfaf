@@ -1,0 +1,19 @@
+FROM oven/bun:1 AS base
+WORKDIR /app
+
+# Install dependencies
+COPY package.json bun.lockb* ./
+RUN bun install --frozen-lockfile
+
+# Copy source code
+COPY src ./src
+COPY tsconfig.json ./
+
+# Create data directories
+RUN mkdir -p /app/data /app/tmp /app/outputs
+
+# Expose port
+EXPOSE 4852
+
+# Start the engine server
+CMD ["bun", "run", "src/cli.ts", "server", "."]

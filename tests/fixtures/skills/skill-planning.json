@@ -1,0 +1,16 @@
+{
+  "id": "planning",
+  "name": "Workflow Planning",
+  "description": "Analyze tasks and create detailed execution plans",
+  "tags": [
+    "task_decomposition",
+    "dependency_analysis",
+    "resource_allocation",
+    "timeline_estimation"
+  ],
+  "examples": [
+    "Break down complex projects into actionable steps",
+    "Identify dependencies between workflow tasks",
+    "Allocate resources efficiently across steps"
+  ]
+}

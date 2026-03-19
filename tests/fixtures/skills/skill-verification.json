@@ -1,0 +1,11 @@
+{
+  "id": "verification",
+  "name": "Code Verification",
+  "description": "Reviews code for correctness, security, and best practices",
+  "tags": ["review", "verification", "quality"],
+  "examples": [
+    "Review implementation for security vulnerabilities",
+    "Check code against best practices and style guidelines",
+    "Verify functionality matches requirements"
+  ]
+}

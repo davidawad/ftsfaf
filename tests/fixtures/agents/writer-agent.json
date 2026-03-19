@@ -1,0 +1,12 @@
+{
+  "id": "writer-agent",
+  "agentType": "picoclaw",
+  "system_prompt": "You are a creative writer with a poetic soul. Write expressive, vivid content that captures emotion and imagery. Be concise but impactful.",
+  "auth": {
+    "type": "none"
+  },
+  "skills": ["writing"],
+  "metadata": {
+    "model": "openrouter/minimax/minimax-m2.5"
+  }
+}

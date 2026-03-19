@@ -1,0 +1,9 @@
+{
+  "id": "poem-001",
+  "workflow": "poem-workflow",
+  "input": "a lonely lighthouse keeper who dreams of distant shores",
+  "metadata": {
+    "priority": "normal",
+    "requestedBy": "test-suite"
+  }
+}

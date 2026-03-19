@@ -1,0 +1,33 @@
+{
+  "id": "poem-workflow",
+  "name": "Simple Poem Creation Workflow",
+  "description": "Two writers create a 2-paragraph poem, then an editor evaluates it",
+  "output": {
+    "type": "string",
+    "source": "evaluate",
+    "description": "Editor's evaluation of the complete poem"
+  },
+  "steps": [
+    {
+      "id": "write-verse1",
+      "agent": "writer-agent",
+      "skill": "writing",
+      "user_prompt": "Write a single paragraph poem (4-6 lines) about: {{task.input}}\n\nMake it vivid and emotional. This will be the first paragraph of a two-paragraph poem.",
+      "depends_on": []
+    },
+    {
+      "id": "write-verse2",
+      "agent": "writer-agent",
+      "skill": "writing",
+      "user_prompt": "Continue this poem with a second paragraph (4-6 lines) that builds on and completes the first:\n\n{{artifacts.write-verse1}}\n\nOriginal theme: {{task.input}}\n\nThe second paragraph should provide resolution or deeper insight.",
+      "depends_on": ["write-verse1"]
+    },
+    {
+      "id": "evaluate",
+      "agent": "editor-agent",
+      "skill": "editing",
+      "user_prompt": "Evaluate this 2-paragraph poem for:\n1. Creativity and originality\n2. Coherence between paragraphs\n3. Emotional impact\n4. Use of imagery and language\n\nPoem:\n\n{{artifacts.write-verse1}}\n\n{{artifacts.write-verse2}}\n\nProvide a thoughtful 2-3 sentence critique with specific observations.",
+      "depends_on": ["write-verse2"]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "debug",
+  "name": "Debug",
+  "description": "Simple debugging capability for testing agent connectivity and basic functionality",
+  "tags": ["debug", "testing", "diagnostics"],
+  "examples": [
+    "Echo this message",
+    "Test connectivity",
+    "Verify agent is responding"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "feature-dev",
+  "name": "Feature Development Pipeline",
+  "description": "Implements, verifies, and tests a feature",
+  "output": {
+    "type": "string",
+    "source": "test",
+    "description": "Test results for the implemented feature"
+  },
+  "steps": [
+    {
+      "id": "implement",
+      "agent": "swe-agent",
+      "skill": "coding",
+      "user_prompt": "Implement the requested feature",
+      "depends_on": []
+    },
+    {
+      "id": "verify",
+      "agent": "verifier-agent",
+      "skill": "verification",
+      "user_prompt": "Review and verify the implementation",
+      "depends_on": ["implement"],
+      "on_fail": {
+        "route_to": "implement",
+        "max_iterations": 3,
+        "inject_artifact": "verification_feedback"
+      }
+    },
+    {
+      "id": "test",
+      "agent": "tester-agent",
+      "skill": "testing",
+      "user_prompt": "Generate and run tests for the implementation",
+      "depends_on": ["verify"]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "server": {
+    "port": 4852
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
+  },
+  "sqlite": {
+    "path": "./test-ftsfaf.db"
+  },
+  "agents_dir": "./tests/fixtures/agents",
+  "workflows_dir": "./tests/fixtures/workflows",
+  "skills_dir": "./tests/fixtures/skills",
+  "default_system_prompt": "./prompts/default-system.md",
+  "startup_timeout_ms": 30000,
+  "health_poll_interval_ms": 1000
+}

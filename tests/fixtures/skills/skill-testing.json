@@ -1,0 +1,11 @@
+{
+  "id": "testing",
+  "name": "Test Generation and Execution",
+  "description": "Generates unit tests and integration tests, runs test suites",
+  "tags": ["testing", "qa", "test-generation"],
+  "examples": [
+    "Generate unit tests for a TypeScript module",
+    "Create integration tests for an API",
+    "Run test suite and report results"
+  ]
+}

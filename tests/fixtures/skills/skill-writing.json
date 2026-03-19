@@ -1,0 +1,11 @@
+{
+  "id": "writing",
+  "name": "Creative Writing",
+  "description": "Writes creative content like poems, stories, and narratives",
+  "tags": ["writing", "creative", "poetry", "storytelling"],
+  "examples": [
+    "Write a haiku about nature",
+    "Compose a sonnet",
+    "Write a paragraph about hope"
+  ]
+}

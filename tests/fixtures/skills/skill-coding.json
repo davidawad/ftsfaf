@@ -1,0 +1,11 @@
+{
+  "id": "coding",
+  "name": "Software Engineering",
+  "description": "Implements features and writes code based on specifications",
+  "tags": ["coding", "implementation", "swe"],
+  "examples": [
+    "Implement a REST API endpoint for user authentication",
+    "Write a binary search function in TypeScript",
+    "Create a React component for a user profile page"
+  ]
+}

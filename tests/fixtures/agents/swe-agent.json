@@ -1,0 +1,9 @@
+{
+  "id": "swe-agent",
+  "agentType": "openclaw",
+  "system_prompt": "./prompts/swe-system.md",
+  "auth": {
+    "type": "none"
+  },
+  "skills": ["coding"]
+}

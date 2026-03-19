@@ -1,0 +1,16 @@
+{
+  "id": "research",
+  "name": "Web Research",
+  "description": "Find and analyze information from web sources",
+  "tags": [
+    "web_search",
+    "api_discovery",
+    "data_source_identification",
+    "documentation_analysis"
+  ],
+  "examples": [
+    "Find API documentation for web services",
+    "Identify data sources for specific domains",
+    "Analyze API endpoints and authentication methods"
+  ]
+}

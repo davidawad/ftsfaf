@@ -1,0 +1,9 @@
+{
+  "id": "tester-agent",
+  "agentType": "openclaw",
+  "system_prompt": "./prompts/tester-system.md",
+  "auth": {
+    "type": "none"
+  },
+  "skills": ["testing"]
+}

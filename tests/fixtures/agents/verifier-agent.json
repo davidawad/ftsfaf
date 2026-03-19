@@ -1,0 +1,9 @@
+{
+  "id": "verifier-agent",
+  "agentType": "openclaw",
+  "system_prompt": "You are a verification agent. Review code, tests, and documentation to ensure quality, correctness, and completeness. Provide detailed feedback on issues found and suggest improvements.",
+  "auth": {
+    "type": "none"
+  },
+  "skills": ["verification"]
+}

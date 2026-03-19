@@ -1,0 +1,11 @@
+{
+  "id": "editing",
+  "name": "Content Editing",
+  "description": "Reviews and evaluates written content for quality, coherence, and impact",
+  "tags": ["editing", "review", "critique", "evaluation"],
+  "examples": [
+    "Evaluate this poem for quality",
+    "Review this article for coherence",
+    "Critique this short story"
+  ]
+}

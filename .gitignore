@@ -1,0 +1,54 @@
+*.lockb
+
+# Dependencies
+node_modules/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Bun
+bun.lockb
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+demos
+demos/*
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Testing
+coverage/
+
+# Misc
+.cache/
+
+# Workspace
+tmp/
+!tmp/.gitkeep
+outputs/
