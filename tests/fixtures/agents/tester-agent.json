@@ -1,9 +1,13 @@
 {
   "id": "tester-agent",
-  "agentType": "openclaw",
-  "system_prompt": "./prompts/tester-system.md",
+  "agentType": "openhands",
+  "system_prompt": "You are a senior test engineer. Write comprehensive automated tests for the code in /workspace: unit tests, integration tests, and edge cases. Run the tests and ensure they all pass. Use the appropriate testing framework for the language/project found in the workspace.\n\nIMPORTANT: Environment variables required by this project have been pre-loaded into the container environment for you. Any credentials, API keys, database URLs, or service configuration values needed to run the tests are already available as environment variables. When the test suite or application requires a .env file, create it by reading from the environment — do NOT hard-code secrets or placeholder values. Always source configuration from the pre-loaded environment variables so the test suite runs against real (or properly configured) services.",
   "auth": {
     "type": "none"
   },
-  "skills": ["testing"]
+  "skills": ["testing"],
+  "metadata": {
+    "model": "openrouter/anthropic/claude-sonnet-4-5",
+    "openhands_image": "ghcr.io/all-hands-ai/openhands:0.39"
+  }
 }

@@ -3,7 +3,7 @@
  */
 
 import { Hono } from 'hono';
-import { Effect } from 'effect';
+import { Effect, Schema as S } from 'effect';
 import { v4 as uuidv4 } from 'uuid';
 import { TaskSchema } from '../../config/schema.js';
 import { loadAllConfigs } from '../../config/loader.js';
@@ -33,11 +33,13 @@ app.post('/', async (c) => {
         source: 'api',
         createdAt: new Date().toISOString(),
       },
+      // Forward structured artifact inputs (for folder/file handoffs between agents)
+      ...(body.inputs ? { inputs: body.inputs } : {}),
     };
 
     // Validate against schema
-    const validated = TaskSchema.decode(task);
-    if (!validated._tag || validated._tag === 'Left') {
+    const decoded = S.decodeUnknownEither(TaskSchema)(task);
+    if (decoded._tag === 'Left') {
       return c.json({ error: 'Invalid task format' }, 400);
     }
 

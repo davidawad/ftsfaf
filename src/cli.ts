@@ -4,12 +4,9 @@ import { Command } from "commander";
 import { Effect } from "effect";
 import * as path from "path";
 import * as fs from "fs/promises";
-import { makeDatabaseLayer, DatabaseService } from "./runtime/db/layer.js";
-import { loadAllConfigs, loadTask } from "./config/loader.js";
-import { executeWorkflow } from "./runtime/executor.js";
+import { loadAllConfigs } from "./config/loader.js";
 import { bootstrapAdapters } from "./adapters/bootstrap.js";
 import { logger } from "./utils/logger.js";
-import { SANDBOX_BASE_PATH } from "./utils/constants.js";
 
 const program = new Command();
 
@@ -93,7 +90,6 @@ program
     }
 
     const workDir = path.resolve(dir);
-    const configPath = path.join(workDir, "ftsfaf.config.json");
 
     try {
       // Load config to get engine URL
@@ -112,21 +108,49 @@ program
         workflow: options.workflow,
       }, "Submitting task to engine");
 
-      // Determine workflow ID
-      const workflowId = options.workflow ?? workflows.keys().next().value;
+      // Determine if --task is a JSON file path or a raw string
+      let taskInput = options.task;
+      let taskFileData: Record<string, unknown> | null = null;
+
+      const isFilePath =
+        options.task.endsWith(".json") ||
+        options.task.startsWith("./") ||
+        options.task.startsWith("/");
+
+      if (isFilePath) {
+        try {
+          const resolvedPath = path.resolve(options.task);
+          const raw = await fs.readFile(resolvedPath, "utf-8");
+          taskFileData = JSON.parse(raw);
+          taskInput = (taskFileData?.input as string) ?? options.task;
+          logger.info({ path: resolvedPath }, "Loaded task from file");
+        } catch (err) {
+          // If file read fails, treat as raw string input
+          logger.warn({ task: options.task }, "--task looks like a path but could not be read; treating as raw input");
+        }
+      }
+
+      // Determine workflow ID: task file > CLI flag > first found
+      const workflowId =
+        (taskFileData?.workflow as string | undefined) ??
+        options.workflow ??
+        workflows.keys().next().value;
       if (!workflowId) {
         logger.error("No workflows found");
         process.exit(1);
       }
 
-      // Prepare task payload
-      const taskPayload = {
+      // Prepare task payload (merge task file data + CLI overrides)
+      const taskPayload: Record<string, unknown> = {
         workflow: workflowId,
-        input: options.task,
+        input: taskInput,
         metadata: {
+          ...(taskFileData?.metadata as object | undefined),
           source: 'cli',
           createdAt: new Date().toISOString(),
         },
+        // Forward structured artifact inputs if present in task file
+        ...(taskFileData?.inputs ? { inputs: taskFileData.inputs } : {}),
       };
 
       // Submit task to engine
@@ -144,7 +168,7 @@ program
         process.exit(1);
       }
 
-      const result = await response.json();
+      const result = await response.json() as { task_id: string };
       logger.info(result, "Task submitted successfully");
 
       // If --wait flag, poll for completion
@@ -157,7 +181,7 @@ program
           
           const statusResponse = await fetch(`${engineUrl}/tasks/${taskId}`);
           if (statusResponse.ok) {
-            const status = await statusResponse.json();
+            const status = await statusResponse.json() as { status: string; run_id: string };
             logger.info({ status: status.status }, "Task status");
             
             if (status.status === 'completed' || status.status === 'failed') {

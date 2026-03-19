@@ -123,6 +123,25 @@ test-congress-real:
     @echo "Running Congress browser integration test (real agents)..."
     @bun src/cli.ts run tests/integration/congress-browser
 
+# Run integrated software feature-dev workflow (implement → verify → test via OpenHands agents)
+# Usage: just feature-dev
+# Optional: just feature-dev workspace=./path/to/your/repo
+feature-dev workspace="./workspace/project": engine-start
+    @echo ""
+    @echo "==================================="
+    @echo "Feature Development Workflow"
+    @echo "Workspace: {{workspace}}"
+    @echo "==================================="
+    @echo ""
+    @mkdir -p {{workspace}}
+    @echo "Submitting task to engine..."
+    @bun src/cli.ts run . \
+      --task tasks/integrated-software-workflow/task.json \
+      --engine-url http://localhost:4852 \
+      --wait
+    @echo ""
+    @echo "Feature-dev workflow complete! View results at http://localhost:9482"
+
 # Run all checks (lint + typecheck + test)
 check: lint typecheck test
     @echo "All checks passed!"

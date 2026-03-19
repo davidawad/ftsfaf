@@ -4,10 +4,10 @@
  */
 
 import { adapterRegistry } from "./registry.js";
-import { createOpenClawAdapter } from "./openclaw/adapter.js";
 import { createNullClawAdapter } from "./nullclaw/adapter.js";
 import { createZeroClawAdapter } from "./zeroclaw/adapter.js";
 import { createPicoClawAdapter } from "./picoclaw/adapter.js";
+import { createOpenHandsAdapter } from "./openhands/adapter.js";
 import { logger } from "../utils/logger.js";
 
 /**
@@ -27,6 +27,9 @@ export function bootstrapAdapters(): void {
   
   // Register picoclaw
   adapterRegistry.register("picoclaw", createPicoClawAdapter());
+
+  // Register openhands (Docker-based SWE agent)
+  adapterRegistry.register("openhands", createOpenHandsAdapter());
   
   logger.info(
     { adapters: adapterRegistry.getAgentTypes() },

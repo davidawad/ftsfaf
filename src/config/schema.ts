@@ -129,6 +129,41 @@ const OnFailSchema = S.Struct({
   inject_artifact: S.String,
 });
 
+// ============================================================================
+// Artifact Schemas (for inter-agent handoffs)
+// ============================================================================
+
+export const ArtifactTypeSchema = S.Union(
+  S.Literal("text"),
+  S.Literal("folder"),
+  S.Literal("file"),
+  S.Literal("git_repo")
+);
+
+export type ArtifactType = S.Schema.Type<typeof ArtifactTypeSchema>;
+
+/**
+ * Artifact definition — declares an input/output artifact slot in a workflow or step
+ */
+export const ArtifactDefinitionSchema = S.Struct({
+  id: S.String,
+  type: ArtifactTypeSchema,
+  description: S.String,
+  required: S.optional(S.Boolean),
+});
+
+export type ArtifactDefinition = S.Schema.Type<typeof ArtifactDefinitionSchema>;
+
+/**
+ * Produced artifact descriptor on a workflow step
+ */
+export const StepArtifactOutputSchema = S.Struct({
+  id: S.String,
+  type: ArtifactTypeSchema,
+});
+
+export type StepArtifactOutput = S.Schema.Type<typeof StepArtifactOutputSchema>;
+
 const WorkflowStepSchema = S.Struct({
   id: S.String,
   agent: S.String,
@@ -136,6 +171,10 @@ const WorkflowStepSchema = S.Struct({
   user_prompt: S.String,
   depends_on: S.Array(S.String),
   on_fail: S.optional(OnFailSchema),
+  /** Artifact IDs (from workflow inputs or prior step outputs) this step should receive */
+  consumes_artifacts: S.optional(S.Array(S.String)),
+  /** Artifact this step produces for downstream steps */
+  produces_artifact: S.optional(StepArtifactOutputSchema),
 });
 
 const WorkflowOutputSchema = S.Struct({
@@ -148,6 +187,8 @@ export const WorkflowSchema = S.Struct({
   id: S.String,
   name: S.String,
   description: S.optional(S.String),
+  /** Declared input artifacts that must be supplied by the task */
+  inputs: S.optional(S.Array(ArtifactDefinitionSchema)),
   output: WorkflowOutputSchema,
   steps: S.Array(WorkflowStepSchema),
 });
@@ -190,11 +231,35 @@ export type FtsfafConfig = S.Schema.Type<typeof FtsfafConfigSchema>;
 // Task Schema
 // ============================================================================
 
+/**
+ * A structured artifact input value supplied by a task.
+ * - type: matches ArtifactType
+ * - path: for folder/file/git_repo artifacts — host filesystem path
+ * - content: for text artifacts — inline content
+ */
+export const TaskInputValueSchema = S.Struct({
+  type: ArtifactTypeSchema,
+  path: S.optional(S.String),
+  content: S.optional(S.String),
+});
+
+export type TaskInputValue = S.Schema.Type<typeof TaskInputValueSchema>;
+
 export const TaskSchema = S.Struct({
   id: S.String,
   workflow: S.String,
   input: S.String,
   metadata: S.optional(S.Record({ key: S.String, value: S.Unknown })),
+  /** Structured artifact inputs that map to the workflow's declared inputs */
+  inputs: S.optional(S.Record({ key: S.String, value: TaskInputValueSchema })),
+  /**
+   * Paths to .env-format files on the host to load and inject as environment
+   * variables into every agent container for this task.
+   * Paths are resolved relative to the current working directory.
+   * Files that don't exist are skipped with a warning (not a fatal error).
+   * Values in later files override values in earlier files.
+   */
+  env_files: S.optional(S.Array(S.String)),
 });
 
 export type Task = S.Schema.Type<typeof TaskSchema>;

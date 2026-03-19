@@ -1,7 +1,15 @@
 {
   "id": "feature-dev",
   "name": "Feature Development Pipeline",
-  "description": "Implements, verifies, and tests a feature",
+  "description": "Implements, verifies, and tests a feature across three OpenHands agents. The repository folder is passed between agents as a shared workspace artifact.",
+  "inputs": [
+    {
+      "id": "repo",
+      "type": "folder",
+      "description": "Path to the local repository the agents will work in. This folder is mounted as /workspace in each agent container.",
+      "required": true
+    }
+  ],
   "output": {
     "type": "string",
     "source": "test",
@@ -12,15 +20,25 @@
       "id": "implement",
       "agent": "swe-agent",
       "skill": "coding",
-      "user_prompt": "Implement the requested feature",
-      "depends_on": []
+      "user_prompt": "{{input}}\n\nImplement this feature in the repository at /workspace. Write clean, well-documented code following the existing project conventions.",
+      "depends_on": [],
+      "consumes_artifacts": ["repo"],
+      "produces_artifact": {
+        "id": "impl_repo",
+        "type": "folder"
+      }
     },
     {
       "id": "verify",
       "agent": "verifier-agent",
       "skill": "verification",
-      "user_prompt": "Review and verify the implementation",
+      "user_prompt": "Review the implementation in /workspace. Use all available variables and information to RUN the code, and validate that it produces the actual intended outputs. Check for correctness, security issues, code quality, and adherence to project conventions. Fix any critical issues you find directly in the code.",
       "depends_on": ["implement"],
+      "consumes_artifacts": ["impl_repo"],
+      "produces_artifact": {
+        "id": "verified_repo",
+        "type": "folder"
+      },
       "on_fail": {
         "route_to": "implement",
         "max_iterations": 3,
@@ -31,8 +49,13 @@
       "id": "test",
       "agent": "tester-agent",
       "skill": "testing",
-      "user_prompt": "Generate and run tests for the implementation",
-      "depends_on": ["verify"]
+      "user_prompt": "Write comprehensive automated tests for the feature implemented in /workspace. Run the tests and report results. Ensure all tests pass before finishing.",
+      "depends_on": ["verify"],
+      "consumes_artifacts": ["verified_repo"],
+      "produces_artifact": {
+        "id": "test_results",
+        "type": "text"
+      }
     }
   ]
 }
